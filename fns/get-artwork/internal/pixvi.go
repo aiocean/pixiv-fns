@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -13,7 +14,7 @@ import (
 
 func FetchWork(id string) (artwork *pixivv1.Artwork, err error) {
 
-	apiEndpoint := "https://www.pixiv.net/ajax/illust/" + id
+	apiEndpoint := "https://www.pixiv.net/ajax/illust/" + id + "?lang=en"
 
 	client := &http.Client{
 		Timeout: time.Minute * 4,
@@ -77,8 +78,50 @@ func FetchWork(id string) (artwork *pixivv1.Artwork, err error) {
 		Width:    uint32(body.Get("width").Uint()),
 		Height:   uint32(body.Get("height").Uint()),
 	}
+
+	imageSize, err := getImageSize(firstUrl.Original)
+	if err != nil {
+		return nil, err
+	}
+
+	firstUrl.OriginalSize = imageSize / 1000000
+
 	artwork.ImageUrls = append(artwork.ImageUrls, firstUrl)
 	artwork.AgeLimit = ageLimit
 	artwork.UserId = body.Get("userId").String()
 	return artwork, err
+}
+
+func getImageSize(imageUrl string) (float32, error) {
+	client := &http.Client{
+		Timeout: time.Minute * 4,
+	}
+
+	req, err := http.NewRequest("GET", imageUrl, nil)
+	if err != nil {
+		return 0, err
+	}
+	req.Header.Set("Referer", "https://www.pixiv.net")
+	req.Header.Set("Accept-Language", "en-US,en;q=0.5")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return 0, err
+	}
+
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}()
+
+	contentLength := resp.Header.Get("content-length")
+	imageSize, err := strconv.ParseFloat(contentLength, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return float32(imageSize), nil
 }

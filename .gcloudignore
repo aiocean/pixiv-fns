@@ -1,0 +1,9 @@
+go.mod
+go.sum
+.idea
+.git
+.gitignore
+.envrc
+cmd
+*.tf
+.terraform

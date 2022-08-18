@@ -2,47 +2,54 @@ terraform {
   cloud {
     organization = "aiocean"
     workspaces {
-      name = "pixiv"
-    }
-  }
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.0"
+      name = "pixiv-prod"
     }
   }
 
   required_version = ">= 0.14.0"
 }
 
-locals {
-  functions = {
-    "get-artwork" = {
-      name = "get-artwork"
-    }
-  }
+variable "gcp_project_id" {}
+variable "gcp_region" {}
+
+provider "google" {
+  project = var.gcp_project_id
+  region  = var.gcp_region
 }
 
-provider "aws" {
-  region     = var.aws_region
-  access_key = var.aws_access_key_id
-  secret_key = var.aws_secret_access_key
-
-  skip_metadata_api_check     = true
-  skip_region_validation      = true
-  skip_credentials_validation = true
-  skip_get_ec2_platforms      = true
-  skip_requesting_account_id  = true
+provider "google-beta" {
+  project = var.gcp_project_id
+  region  = var.gcp_region
 }
 
-module "lambda_function" {
-  for_each = local.functions
+resource "google_service_account" "function-sa" {
+  account_id   = "function-${lower(terraform.workspace)}"
+  display_name = "function-${lower(terraform.workspace)}"
+  project      = var.gcp_project_id
+}
 
-  source        = "terraform-aws-modules/lambda/aws"
-  architectures = ["arm64"]
-  function_name = "${terraform.workspace}-${var.env}-${each.value.name}"
-  runtime       = "provided.al2"
-  handler       = "./bootstrap"
-  source_path   = "${path.module}/fns/${each.value.name}/.bin/bootstrap"
+module "getUser" {
+  source = "./fns/get-user"
+
+  gcp_project_id        = var.gcp_project_id
+  gcp_region            = var.gcp_region
+  name                  = "${terraform.workspace}-getUser"
+  service_account_email = google_service_account.function-sa.email
+}
+
+module "getArtwork" {
+  source = "./fns/get-artwork"
+
+  gcp_project_id        = var.gcp_project_id
+  gcp_region            = var.gcp_region
+  name                  = "${terraform.workspace}-getArtwork"
+  service_account_email = google_service_account.function-sa.email
+}
+
+output "getUser_url" {
+  value = module.getUser.function_url
+}
+
+output "getArtwork_url" {
+  value = module.getArtwork.function_url
 }
