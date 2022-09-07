@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/aiocean/cfutil v0.0.2-0.20220907052841-bd15f0d8cb92
-	github.com/aiocean/go-sdk v0.0.0-20220907080202-439104519a97
+	github.com/aiocean/go-sdk v0.0.0-20220907080730-5c7bfd756f52
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/montanaflynn/stats v0.6.6 // indirect
