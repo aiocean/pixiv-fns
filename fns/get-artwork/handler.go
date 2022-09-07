@@ -1,22 +1,20 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
-	"github.com/aiocean/cfutil"
 	"github.com/aiocean/get-artwork/internal"
 	pixivv1 "github.com/aiocean/go-sdk/pixiv/v1"
-	"google.golang.org/protobuf/proto"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	cfutil.ProtobufHandler(w, r, &pixivv1.GetArtworkRequest{}, getArtwork)
+	pixivv1.GetArtworkHandler(w, r, getArtwork)
 }
 
-func getArtwork(request proto.Message) (proto.Message, error) {
-	req := request.(*pixivv1.GetArtworkRequest)
+func getArtwork(ctx context.Context, request *pixivv1.GetArtworkRequest) (*pixivv1.GetArtworkResponse, error) {
 
-	artwork, err := internal.FetchWork(req.GetArtworkId())
+	artwork, err := internal.FetchWork(request.GetArtworkId())
 	if err != nil {
 		return nil, err
 	}
