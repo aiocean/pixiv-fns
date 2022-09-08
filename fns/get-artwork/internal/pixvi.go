@@ -64,7 +64,26 @@ func FetchWork(id string) (artwork *pixivv1.Artwork, err error) {
 		if strings.Contains(result.String(), "bookmarks") || strings.Contains(result.String(), "original") {
 			continue
 		}
-		artwork.Tags = append(artwork.Tags, result.String())
+		tags := strings.Split(result.String(), ",")
+		for _, tagName := range tags {
+			tagName = strings.TrimSpace(tagName)
+			// check if result is exist in artwork.Tags
+			isExist := false
+			for _, tag := range artwork.Tags {
+				if tag.GetId() == tagName {
+					isExist = true
+					break
+				}
+			}
+			if isExist {
+				continue
+			}
+			artwork.Tags = append(artwork.Tags, &pixivv1.Tag{
+				Name: tagName,
+				Id:   tagName,
+			})
+		}
+
 	}
 
 	urls := body.Get("urls")
@@ -89,6 +108,10 @@ func FetchWork(id string) (artwork *pixivv1.Artwork, err error) {
 	artwork.ImageUrls = append(artwork.ImageUrls, firstUrl)
 	artwork.AgeLimit = ageLimit
 	artwork.UserId = body.Get("userId").String()
+	artwork.LikeCount = body.Get("likeCount").Int()
+	artwork.ViewCount = body.Get("viewCount").Int()
+	artwork.CommentCount = body.Get("commentCount").Int()
+	artwork.BookmarkCount = body.Get("bookmarkCount").Int()
 	return artwork, err
 }
 

@@ -3,7 +3,7 @@ module github.com/aiocean/get-artwork
 go 1.16
 
 require (
-	github.com/aiocean/go-sdk v0.0.0-20220907080730-5c7bfd756f52
+	github.com/aiocean/go-sdk v0.0.0-20220908063600-a38662486e0d
 	github.com/tidwall/gjson v1.14.2
 )
 

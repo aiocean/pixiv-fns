@@ -16,6 +16,10 @@ github.com/aiocean/go-sdk v0.0.0-20220907080202-439104519a97 h1:08xJ6veaoTdjFzCF
 github.com/aiocean/go-sdk v0.0.0-20220907080202-439104519a97/go.mod h1:f08ze4i6rLh6M76I7+DCqCu+hwf6lFoiP1wwi56NtCk=
 github.com/aiocean/go-sdk v0.0.0-20220907080730-5c7bfd756f52 h1:nx+ESDc9SabzUhWKDYDtoHTQ961u9jjh2vTtfzTQROQ=
 github.com/aiocean/go-sdk v0.0.0-20220907080730-5c7bfd756f52/go.mod h1:f08ze4i6rLh6M76I7+DCqCu+hwf6lFoiP1wwi56NtCk=
+github.com/aiocean/go-sdk v0.0.0-20220908062801-ba3390b5b020 h1:CGnAYPXL7cXNP0704yO89+t6jz4FggGJum6BoXhFtRs=
+github.com/aiocean/go-sdk v0.0.0-20220908062801-ba3390b5b020/go.mod h1:f08ze4i6rLh6M76I7+DCqCu+hwf6lFoiP1wwi56NtCk=
+github.com/aiocean/go-sdk v0.0.0-20220908063600-a38662486e0d h1:w61+A43VTBCNfj2xEwRaG7wBbelsSBMXNaeTl1GqSB4=
+github.com/aiocean/go-sdk v0.0.0-20220908063600-a38662486e0d/go.mod h1:f08ze4i6rLh6M76I7+DCqCu+hwf6lFoiP1wwi56NtCk=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
