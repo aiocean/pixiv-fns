@@ -61,7 +61,7 @@ func FetchWork(id string) (artwork *pixivv1.Artwork, err error) {
 
 	tagsResult := body.Get("tags.tags.#.translation.en").Array()
 	for _, result := range tagsResult {
-		if strings.Contains(result.String(), "bookmarks") {
+		if strings.Contains(result.String(), "bookmarks") || strings.Contains(result.String(), "original") {
 			continue
 		}
 		artwork.Tags = append(artwork.Tags, result.String())
